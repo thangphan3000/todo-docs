@@ -1,9 +1,15 @@
 # Cozy Todo - End-to-End DevOps Automation with AWS & Kubernetes
 
+A production-grade Todo application showcasing complete DevOps automation — including CI/CD pipelines, monitoring, logging, and GitOps-based deployments using AWS EKS and Kubernetes.
+
 ## Table of Contents
 
 - [Project Links](#project-links)
+- [Technologies Used](#technologies-used)
 - [AWS Networking, Security, Resource and Service Architecture](#aws-networking-security-resource-and-service-architecture)
+  - [Networking Architecture](#networking-architecture)
+  - [Security Architecture](#security-architecture)
+  - [Resource and Service Architecture](#resource-and-service-architecture)
 - [Grafana Monitoring Dashboard](#grafana-monitoring-dashboard)
 - [Kibana Logging with ELK Stack](#kibana-logging-with-elk-stack)
 - [Argo CD – App of Apps Pattern Deployment](#argo-cd--app-of-apps-pattern-deployment)
@@ -33,6 +39,17 @@
 ### Kubernetes Manifests (Helm Charts & GitOps)
 
 - [Manifests Repository](https://github.com/thangphan3000/todo-manifests)
+
+---
+
+## Technologies Used
+
+- **Cloud Provider**: AWS (EKS, EC2, S3, IAM, VPC)
+- **Containerization & Orchestration**: Docker, Kubernetes, Helm
+- **Monitoring & Logging**: Prometheus, Grafana, Alertmanager, ELK (Elasticsearch, Logstash, Kibanan)
+- **CI/CD & GitOps**: GitHub Actions, ArgoCD, Trivy
+- **IaC & Configuration Management**: Terraform, Ansible
+- **Notifications**: Slack Webhooks
 
 ---
 
@@ -136,7 +153,7 @@ Uses Argo CD with the App of Apps pattern to manage deployments on AWS EKS.
 2. **logging**
 
    - Path: `charts/logging`
-   - Filebeat, Logstash, Elasticsearch, Kibana
+   - Fluent Bit, Elasticsearch, Kibana
    - Status: 🔄 _Progressing_
 
 3. **monitoring**
@@ -203,6 +220,10 @@ Alert resolved
 
 This diagram illustrates the CI/CD pipeline using GitHub Actions, Docker, AWS ECR, Trivy, and ArgoCD.
 
+### Diagram
+
+![CI/CD Flow](./images/github-actions/workflow.png)
+
 ### CI/CD Steps
 
 1. **Developer** pushes code to the Frontend or Backend repositories.
@@ -219,11 +240,3 @@ This diagram illustrates the CI/CD pipeline using GitHub Actions, Docker, AWS EC
    - Detects new image tags
    - Commits updated tag to the **GitOps manifest repo**
    - ArgoCD syncs and deploys to AWS EKS
-
-### Pipeline architecture
-
-![CI/CD Flow](./images/github-actions/workflow.png)
-
-### Slack Notification Examples
-
-![Slack notification](./images/github-actions/slack-pipeline-notify.png)

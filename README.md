@@ -1,10 +1,54 @@
 # Cozy Todo - End-to-End DevOps Automation with AWS & Kubernetes documentation
 
-## Table of contents
+## Table of Contents
 
+- Projects's links
+- AWS networking, security & resource and service architecture
 - Grafana Monitoring Dashboard
+- Kibana Logging & Monitoring
+- Argo CD – App of Apps Pattern Deployment
+- Alert Manager & Slack
+- Github Action workflow architecture
 
-## 📊 Grafana Monitoring Dashboard
+## Projects's links
+
+#### Applications & Dockerfiles
+
+- [GitHub FE repository](https://github.com/thangphan3000/todo-web)
+- [GitHub BE repository](https://github.com/thangphan3000/todo-api)
+
+#### Github Actions workflows
+
+- [FE Github Action CI workflow file](https://github.com/thangphan3000/todo-api/blob/main/.github/workflows/ci-dev.yaml)
+- [BE Github Action CI workflow file](https://github.com/thangphan3000/todo-web/blob/main/.github/workflows/ci-dev.yml)
+
+#### IaC (Terraform)
+
+- [GitHub repository](https://github.com/thangphan3000/todo-infra)
+
+#### Configuration management (Ansible)
+
+- [GitHub repository](https://github.com/thangphan3000/todo-configuration-management)
+
+#### Manifests (K8s Helm Charts & GitOps)
+
+- [GitHub repository](https://github.com/thangphan3000/todo-manifests)
+
+## AWS networking, security & resource and services architecture
+
+#### Networking Architecture
+
+![image](./images/aws/networking.png)
+
+#### Security Architecture
+
+![image](./images/aws/security.png)
+
+#### Resource and Service Architecture
+
+![image](./images/aws/service-and-resource.png)
+
+## Grafana Monitoring Dashboard
 
 This dashboard is used for real-time monitoring of a web application's backend (e.g., `todo-cozy-backend`) performance and system metrics. It provides visibility into request patterns, error rates, and server resource utilization.
 
@@ -12,7 +56,7 @@ This dashboard is used for real-time monitoring of a web application's backend (
 
 ![image](./images/grafana/grafana-dashboard.png)
 
-### 🔹 Key Metrics Overview
+### Key Metrics Overview
 
 - **Process Uptime**: Shows how long the service has been running (e.g., 18.8 minutes).
 - **Total Requests**: Cumulative HTTP requests received (e.g., 5020).
@@ -20,39 +64,39 @@ This dashboard is used for real-time monitoring of a web application's backend (
 - **Average Request Duration**: Tracks average request handling time (e.g., 11.3 ms).
 - **Requests in Progress**: Indicates how many requests are currently being processed.
 
-### 🔹 Requests - API Throughput
+### Requests - API Throughput
 
 - Line chart showing HTTP request throughput per endpoint (`/api/todos`, `/api/todo/2`, etc.).
 - Helps identify traffic trends and peak times.
 
-### 🔹 Errors - Requests by Status Code
+### Errors - Requests by Status Code
 
 - Donut chart visualizing the distribution of HTTP response codes (e.g., 200 OK vs. 404 Not Found).
 - Useful for quickly spotting anomalies in request handling.
 
-### 🔹 Duration - API Latency Percentiles
+### Duration - API Latency Percentiles
 
 - Graph showing p50, p75, p90, p95, and p99 latency percentiles.
 - Helps analyze the distribution of response times and detect slow-performing endpoints.
 
-### 🔹 Average Duration of Requests
+### Average Duration of Requests
 
 - Endpoint-specific request duration over time.
 - Supports performance tuning and identifying bottlenecks.
 
-### 🔹 System Metrics
+### System Metrics
 
 - **CPU Usage**: Current CPU usage percentage (e.g., 35.4%).
 - **Memory Usage**: Memory consumption trends (Resident & Virtual memory).
 - **Open File Descriptors**: Tracks file descriptor usage to monitor system resource limits.
 
-## 📘 Kibana Logging & Monitoring – Documentation
+## Kibana Logging with ELS stack
 
-### 🔍 Log Aggregation & Querying with Kibana
+### Log Aggregation & Querying with Kibana
 
 To monitor and troubleshoot backend applications, I integrated **Kibana** as part of the ELK (Elasticsearch, Logstash, Kibana) stack. Logs from the Kubernetes pods deployed on **AWS EKS** were collected and shipped to **Elasticsearch**, enabling powerful querying and visualization in Kibana.
 
-### ✅ Key Use Cases
+### Key Use Cases
 
 - **Real-Time Log Streaming**  
   Monitored live logs during deployments and incident response using Kibana’s live log stream feature.
@@ -64,7 +108,7 @@ To monitor and troubleshoot backend applications, I integrated **Kibana** as par
   - `correlation_id: backend` to get application log and http log
   - `message: message` to error message
 
-### 🖼️ Screenshot Example
+### Screenshot Example
 
 > **Figure 1**: Kibana query filtering backend service logs(application log) for `json.status: 404` errors
 >
@@ -74,13 +118,13 @@ To monitor and troubleshoot backend applications, I integrated **Kibana** as par
 >
 > ![Kibana Screenshot](./images/kibana/search-logs-by-correlation-id.png)
 
-## 🚀 Argo CD – App of Apps Pattern Deployment
+## Argo CD – App of Apps Pattern Deployment
 
-### 🧩 Overview
+### Overview
 
 This project uses **Argo CD** with the **App of Apps** pattern to manage and deploy a monolith application stack on **Kubernetes (AWS EKS)**. The parent application (`apps-dev`) acts as a single entry point to deploy and manage multiple child applications defined in Helm charts.
 
-### 📦 Parent App: `apps-dev`
+### Parent App: `apps-dev`
 
 - **Project**: `default`
 - **Path**: `envs/dev`
@@ -90,7 +134,7 @@ This project uses **Argo CD** with the **App of Apps** pattern to manage and dep
 
 ---
 
-### 🌱 Child Applications Managed by `apps-dev`
+### Child Applications Managed by `apps-dev`
 
 1. **todo-cozy**
 
@@ -111,7 +155,7 @@ This project uses **Argo CD** with the **App of Apps** pattern to manage and dep
 
 ---
 
-### ✅ Benefits of App of Apps Pattern
+### Benefits of App of Apps Pattern
 
 - Centralized management of all environment-specific applications.
 - Easy to extend or scale by simply adding new apps to the parent manifest.
@@ -119,7 +163,7 @@ This project uses **Argo CD** with the **App of Apps** pattern to manage and dep
 
 ---
 
-### 🖼️ Screenshot Reference
+### Screenshot Reference
 
 > **Figure**: Argo CD UI showing synced applications from the App of Apps pattern deployment
 >

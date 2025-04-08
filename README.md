@@ -1,170 +1,167 @@
-# Cozy Todo - End-to-End DevOps Automation with AWS & Kubernetes documentation
+# Cozy Todo - End-to-End DevOps Automation with AWS & Kubernetes
 
 ## Table of Contents
 
-- Projects's links
-- AWS networking, security & resource and service architecture
-- Grafana Monitoring Dashboard
-- Kibana Logging & Monitoring
-- Argo CD – App of Apps Pattern Deployment
-- Alert Manager & Slack
-- Github Action workflow architecture
+- [Project Links](#project-links)
+- [AWS Networking, Security & Architecture](#aws-networking-security--architecture)
+- [Grafana Monitoring Dashboard](#grafana-monitoring-dashboard)
+- [Kibana Logging with ELK Stack](#kibana-logging-with-elk-stack)
+- [Argo CD – App of Apps Pattern Deployment](#argo-cd--app-of-apps-pattern-deployment)
+- [Alert Manager & Slack](#alert-manager--slack)
+- [GitHub Actions Workflow Architecture](#github-actions-workflow-architecture)
 
-## Projects's links
+## Project Links
 
-#### Applications & Dockerfiles
+### Applications & Dockerfiles
 
-- [GitHub FE repository](https://github.com/thangphan3000/todo-web)
-- [GitHub BE repository](https://github.com/thangphan3000/todo-api)
+- [Frontend Repository](https://github.com/thangphan3000/todo-web)
+- [Backend Repository](https://github.com/thangphan3000/todo-api)
 
-#### Github Actions workflows
+### GitHub Actions Workflows
 
-- [FE Github Action CI workflow file](https://github.com/thangphan3000/todo-api/blob/main/.github/workflows/ci-dev.yaml)
-- [BE Github Action CI workflow file](https://github.com/thangphan3000/todo-web/blob/main/.github/workflows/ci-dev.yml)
+- [Frontend CI Workflow](https://github.com/thangphan3000/todo-web/blob/main/.github/workflows/ci-dev.yml)
+- [Backend CI Workflow](https://github.com/thangphan3000/todo-api/blob/main/.github/workflows/ci-dev.yaml)
 
-#### IaC (Terraform)
+### Infrastructure as Code (Terraform)
 
-- [GitHub repository](https://github.com/thangphan3000/todo-infra)
+- [IaC Repository](https://github.com/thangphan3000/todo-infra)
 
-#### Configuration management (Ansible)
+### Configuration Management (Ansible)
 
-- [GitHub repository](https://github.com/thangphan3000/todo-configuration-management)
+- [Ansible Repository](https://github.com/thangphan3000/todo-configuration-management)
 
-#### Manifests (K8s Helm Charts & GitOps)
+### Kubernetes Manifests (Helm Charts & GitOps)
 
-- [GitHub repository](https://github.com/thangphan3000/todo-manifests)
+- [Manifests Repository](https://github.com/thangphan3000/todo-manifests)
 
-## AWS networking, security & resource and services architecture
+---
 
-#### Networking Architecture
+## AWS Networking, Security & Architecture
 
-![image](./images/aws/networking.png)
+### Networking Architecture
 
-#### Security Architecture
+![Networking](./images/aws/networking.png)
 
-![image](./images/aws/security.png)
+### Security Architecture
 
-#### Resource and Service Architecture
+![Security](./images/aws/security.png)
 
-![image](./images/aws/service-and-resource.png)
+### Resource and Service Architecture
+
+![Service Architecture](./images/aws/service-and-resource.png)
+
+---
 
 ## Grafana Monitoring Dashboard
 
-This dashboard is used for real-time monitoring of a web application's backend (e.g., `todo-cozy-backend`) performance and system metrics. It provides visibility into request patterns, error rates, and server resource utilization.
+This dashboard monitors backend performance and system metrics in real time.
 
-### Overall dashboard
+### Dashboard Overview
 
-![image](./images/grafana/grafana-dashboard.png)
+![Grafana Dashboard](./images/grafana/grafana-dashboard.png)
 
-### Key Metrics Overview
+### Key Metrics
 
-- **Process Uptime**: Shows how long the service has been running (e.g., 18.8 minutes).
-- **Total Requests**: Cumulative HTTP requests received (e.g., 5020).
-- **Error Rate**: Percentage of failed requests (e.g., 38.7%), highlighting reliability issues.
-- **Average Request Duration**: Tracks average request handling time (e.g., 11.3 ms).
-- **Requests in Progress**: Indicates how many requests are currently being processed.
+- **Process Uptime**: E.g., 18.8 minutes
+- **Total Requests**: E.g., 5020
+- **Error Rate**: E.g., 38.7%
+- **Average Request Duration**: E.g., 11.3 ms
+- **Requests in Progress**: Ongoing requests count
 
 ### Requests - API Throughput
 
-- Line chart showing HTTP request throughput per endpoint (`/api/todos`, `/api/todo/2`, etc.).
-- Helps identify traffic trends and peak times.
+Line chart showing requests per endpoint (`/api/todos`, `/api/todo/2`, etc.)
 
 ### Errors - Requests by Status Code
 
-- Donut chart visualizing the distribution of HTTP response codes (e.g., 200 OK vs. 404 Not Found).
-- Useful for quickly spotting anomalies in request handling.
+Donut chart of response status codes (200, 404, etc.)
 
 ### Duration - API Latency Percentiles
 
-- Graph showing p50, p75, p90, p95, and p99 latency percentiles.
-- Helps analyze the distribution of response times and detect slow-performing endpoints.
-
-### Average Duration of Requests
-
-- Endpoint-specific request duration over time.
-- Supports performance tuning and identifying bottlenecks.
+p50, p75, p90, p95, p99 latency metrics
 
 ### System Metrics
 
-- **CPU Usage**: Current CPU usage percentage (e.g., 35.4%).
-- **Memory Usage**: Memory consumption trends (Resident & Virtual memory).
-- **Open File Descriptors**: Tracks file descriptor usage to monitor system resource limits.
+- **CPU Usage**: e.g., 35.4%
+- **Memory Usage**: Resident & virtual memory
+- **Open File Descriptors**: Tracks system limits
 
-## Kibana Logging with ELS stack
+---
 
-### Log Aggregation & Querying with Kibana
+## Kibana Logging with ELK Stack
 
-To monitor and troubleshoot backend applications, I integrated **Kibana** as part of the ELK (Elasticsearch, Logstash, Kibana) stack. Logs from the Kubernetes pods deployed on **AWS EKS** were collected and shipped to **Elasticsearch**, enabling powerful querying and visualization in Kibana.
+Kibana is used for log aggregation and querying with the ELK stack on AWS EKS.
 
 ### Key Use Cases
 
-- **Real-Time Log Streaming**  
-  Monitored live logs during deployments and incident response using Kibana’s live log stream feature.
+- **Live Log Streaming** during deployments
+- **Custom Queries**, e.g.:
+  - `status:500`
+  - `correlation_id: "1f4c08aa-f7b8-429c-a115-a1cb469dbdac"`
+  - `message: message`
 
-- **Custom Log Queries**  
-  Queried application logs using filters such as:
+### Screenshots
 
-  - `status:500` to detect server errors
-  - `correlation_id: backend` to get application log and http log
-  - `message: message` to error message
+**Figure 1**: Filter logs with `json.status: 404`
 
-### Screenshot Example
+![404 Logs](./images/kibana/search-logs-by-status-code.png)
 
-> **Figure 1**: Kibana query filtering backend service logs(application log) for `json.status: 404` errors
->
-> ![Kibana Screenshot](./images/kibana/search-logs-by-status-code.png)
+**Figure 2**: Filter logs with correlation ID
 
-> **Figure 2**: Kibana query filtering backend service logs(http log) for `json.correlation_id: "1f4c08aa-f7b8-429c-a115-a1cb469dbdac"` error
->
-> ![Kibana Screenshot](./images/kibana/search-logs-by-correlation-id.png)
+![Correlation Logs](./images/kibana/search-logs-by-correlation-id.png)
+
+---
 
 ## Argo CD – App of Apps Pattern Deployment
 
 ### Overview
 
-This project uses **Argo CD** with the **App of Apps** pattern to manage and deploy a monolith application stack on **Kubernetes (AWS EKS)**. The parent application (`apps-dev`) acts as a single entry point to deploy and manage multiple child applications defined in Helm charts.
+Uses Argo CD with the App of Apps pattern to manage deployments on AWS EKS.
 
 ### Parent App: `apps-dev`
 
 - **Project**: `default`
 - **Path**: `envs/dev`
-- **Repository**: GitOps-style repo (`git@github.com:thangphan3000/todo-manifests`)
-- **Function**: Defines the list of child applications to be deployed and managed.
-- **Deployment Target**: In-cluster
+- **Repo**: [`todo-manifests`](https://github.com/thangphan3000/todo-manifests)
+- **Purpose**: Manage and deploy multiple child apps
 
----
-
-### Child Applications Managed by `apps-dev`
+### Child Applications
 
 1. **todo-cozy**
 
    - Path: `charts/application`
-   - Deploys the backend/frontend app (likely a fullstack app).
+   - Fullstack app (frontend/backend)
    - Status: ✅ _Healthy_ / _Synced_
 
 2. **logging**
 
    - Path: `charts/logging`
-   - Deploys the centralized logging stack (e.g., Fluent Bit, Elasticsearch, Kibana).
+   - Fluent Bit, Elasticsearch, Kibana
    - Status: 🔄 _Progressing_
 
 3. **monitoring**
    - Path: `charts/monitoring`
-   - Deploys monitoring tools (e.g., Prometheus, Grafana).
+   - Grafana & alert rules
    - Status: ✅ _Healthy_ / _Synced_
 
+### Benefits
+
+- Centralized environment management
+- Scalable and extensible
+- GitOps compatible
+
+### Screenshot
+
+![Argo CD](./images/argocd/argocd-overral.png)
+
 ---
 
-### Benefits of App of Apps Pattern
+## Alert Manager & Slack
 
-- Centralized management of all environment-specific applications.
-- Easy to extend or scale by simply adding new apps to the parent manifest.
-- Fully GitOps-compatible: all changes are version-controlled and auditable.
+_Section coming soon_
 
 ---
 
-### Screenshot Reference
+## GitHub Actions Workflow Architecture
 
-> **Figure**: Argo CD UI showing synced applications from the App of Apps pattern deployment
->
-> ![Argo CD App of Apps](./images/argocd/argocd-overral.png)
+_Section coming soon_

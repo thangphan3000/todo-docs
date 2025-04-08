@@ -3,7 +3,7 @@
 ## Table of Contents
 
 - [Project Links](#project-links)
-- [AWS Networking, Security & Architecture](#aws-networking-security--architecture)
+- [AWS Networking, Security, Resource and Service Architecture](#aws-networking-security-resource-and-service-architecture)
 - [Grafana Monitoring Dashboard](#grafana-monitoring-dashboard)
 - [Kibana Logging with ELK Stack](#kibana-logging-with-elk-stack)
 - [Argo CD – App of Apps Pattern Deployment](#argo-cd--app-of-apps-pattern-deployment)
@@ -36,7 +36,7 @@
 
 ---
 
-## AWS Networking, Security & Architecture
+## AWS Networking, Security, Resource and Service Architecture
 
 ### Networking Architecture
 
@@ -136,7 +136,7 @@ Uses Argo CD with the App of Apps pattern to manage deployments on AWS EKS.
 2. **logging**
 
    - Path: `charts/logging`
-   - Fluent Bit, Elasticsearch, Kibana
+   - Filebeat, Logstash, Elasticsearch, Kibana
    - Status: 🔄 _Progressing_
 
 3. **monitoring**
@@ -158,10 +158,72 @@ Uses Argo CD with the App of Apps pattern to manage deployments on AWS EKS.
 
 ## Alert Manager & Slack
 
-_Section coming soon_
+Alertmanager is configured to route critical alerts to a Slack channel for real-time incident response.
+
+### Configuration Overview
+
+- **Alert Source**: Prometheus rules defined in the `monitoring` Helm chart
+- **Receiver**: Slack Webhook URL
+- **Routing Logic**: Alerts with severity `critical` are routed to Slack
+
+### Custom Prometheus Alert Rules
+
+These rules proactively monitor the backend API and are configured under the `monitoring` chart.
+
+#### `AppDown`
+
+- Fires when the app is unreachable for 1 minute.
+- Severity: `critical`
+
+#### `HighCPUUsage`
+
+- Triggers when CPU usage exceeds 60% for 2 minutes.
+- Severity: `warning`
+
+#### `HighErrorRate`
+
+- Alerts if 60% or more requests result in 4xx/5xx errors in the past 5 minutes.
+- Severity: `critical`
+
+### Slack Notification Examples
+
+**High CPU usage > 60% alert**
+
+Alert happened
+![High CPU usage alert](./images/alert-manager/slack-high-cpu-alert-happen.png)
+
+Alert resolved
+![High CPU usage alert](./images/alert-manager/slack-high-cpu-alert-resolved.png)
 
 ---
 
 ## GitHub Actions Workflow Architecture
 
-_Section coming soon_
+### Overview
+
+This diagram illustrates the CI/CD pipeline using GitHub Actions, Docker, AWS ECR, Trivy, and ArgoCD.
+
+### CI/CD Steps
+
+1. **Developer** pushes code to the Frontend or Backend repositories.
+2. **GitHub Actions** gets triggered:
+   - 🔔 **Send Slack notification** on CI start
+   - Run Unit Tests and Linting
+   - Tag Git version (semantic versioning)
+   - Build Docker image
+   - Push image to **AWS ECR**
+   - Run **Trivy** vulnerability scan on local system and Docker image
+   - Print vulnerability reports
+   - 🔔 **Send Slack notification** on CI results
+3. **ArgoCD Image Updater** watches the ECR image registry:
+   - Detects new image tags
+   - Commits updated tag to the **GitOps manifest repo**
+   - ArgoCD syncs and deploys to AWS EKS
+
+### Pipeline architecture
+
+![CI/CD Flow](./images/github-actions/workflow.png)
+
+### Slack Notification Examples
+
+![Slack notification](./images/github-actions/slack-pipeline-notify.png)

@@ -46,8 +46,8 @@ A production-grade Todo application showcasing complete DevOps automation — in
 
 - **Cloud Provider**: AWS (EKS, EC2, S3, IAM, VPC, RDS, ECR, Secrets Manager, ELB, Route 53)
 - **Containerization & Orchestration**: Docker, Kubernetes, Helm
-- **Monitoring & Logging**: Prometheus, Grafana, Alertmanager, ELK (Elasticsearch, Logstash, Kibanan)
-- **CI/CD & GitOps**: GitHub Actions, ArgoCD, Trivy
+- **Monitoring & Logging**: Prometheus, Grafana, Alertmanager, ELK (Elasticsearch, Logstash, Kibana)
+- **CI/CD & GitOps**: GitHub Actions, Argo CD, Trivy
 - **IaC & Configuration Management**: Terraform, Ansible
 - **Notifications**: Slack Webhooks
 
@@ -119,7 +119,7 @@ Kibana is used for log aggregation and querying with the ELK stack on AWS EKS.
 
 ### Screenshots
 
-**Figure 1**: Filter logs with `json.status: 404`
+**Figure 1**: Filter logs with HTTP status code
 
 ![404 Logs](./images/kibana/search-logs-by-status-code.png)
 
@@ -181,7 +181,6 @@ Alertmanager is configured to route critical alerts to a Slack channel for real-
 
 - **Alert Source**: Prometheus rules defined in the `monitoring` Helm chart
 - **Receiver**: Slack Webhook URL
-- **Routing Logic**: Alerts with severity `critical` are routed to Slack
 
 ### Custom Prometheus Alert Rules
 
@@ -218,7 +217,7 @@ Alert resolved
 
 ### Overview
 
-This diagram illustrates the CI/CD pipeline using GitHub Actions, Docker, AWS ECR, Trivy, and ArgoCD.
+This diagram illustrates the CI/CD pipeline using GitHub Actions, Docker, AWS ECR, Trivy, and Argo CD.
 
 ### Diagram
 
@@ -236,7 +235,7 @@ This diagram illustrates the CI/CD pipeline using GitHub Actions, Docker, AWS EC
    - Run **Trivy** vulnerability scan on local system and Docker image
    - Print vulnerability reports
    - 🔔 **Send Slack notification** on CI results
-3. **ArgoCD Image Updater** watches the ECR image registry:
+3. **Argo CD Image Updater** watches the ECR image registry:
    - Detects new image tags
    - Commits updated tag to the **GitOps manifest repo**
-   - ArgoCD syncs and deploys to AWS EKS
+   - Argo CD syncs and deploys to AWS EKS

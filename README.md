@@ -44,7 +44,7 @@ A production-grade Todo application showcasing complete DevOps automation — in
 
 ## Technologies Used
 
-- **Cloud Provider**: AWS (EKS, EC2, S3, IAM, VPC)
+- **Cloud Provider**: AWS (EKS, EC2, S3, IAM, VPC, RDS, ECR, Secrets Manager, ELB, Route 53)
 - **Containerization & Orchestration**: Docker, Kubernetes, Helm
 - **Monitoring & Logging**: Prometheus, Grafana, Alertmanager, ELK (Elasticsearch, Logstash, Kibanan)
 - **CI/CD & GitOps**: GitHub Actions, ArgoCD, Trivy
